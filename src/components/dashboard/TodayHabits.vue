@@ -8,6 +8,7 @@ defineProps<{
 const emit = defineEmits<{
   delete: [id: string]
   edit: [id: string]
+  add: []
 }>()
 
 defineModel<{
@@ -20,7 +21,7 @@ defineModel<{
     <div class="habits-header">
       <h2>Today's habits</h2>
 
-      <button type="button" class="add-habit-button">+ Add habit</button>
+      <button type="button" class="add-habit-button" @click="emit('add')">+ Add habit</button>
     </div>
 
     <div v-if="habits.length" class="habit-list">
@@ -53,28 +54,35 @@ defineModel<{
   max-width: 900px;
   margin: 0 auto;
   padding: 1.5rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
   background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 4%);
 }
 
 .habits-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .habits-header h2 {
   margin: 0;
+  font-size: 1.2rem;
 }
 
 .add-habit-button {
   border: none;
   background: none;
-  cursor: pointer;
+  color: #555;
   font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.add-habit-button:hover {
+  color: #111;
 }
 
 .habit-list {
@@ -98,7 +106,7 @@ defineModel<{
 .habit-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .habit-color {
@@ -110,25 +118,38 @@ defineModel<{
 
 .habit h3 {
   margin: 0;
+  font-size: 1rem;
 }
 
 .habit p {
   margin: 0.25rem 0 0;
-  color: #666;
+  color: #777;
+  font-size: 0.9rem;
 }
 
-.complete-button {
-  padding: 0.5rem 0.75rem;
+.habit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.habit-actions button {
+  padding: 0.45rem 0.7rem;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 7px;
   background: white;
+  color: #444;
+  font-size: 0.85rem;
   cursor: pointer;
+}
+
+.habit-actions button:hover {
+  background: #f5f5f5;
 }
 
 .empty-state {
   margin: 0;
-  padding: 2rem 0;
+  padding: 3rem 1rem;
   text-align: center;
-  color: #666;
+  color: #777;
 }
 </style>

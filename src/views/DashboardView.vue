@@ -81,7 +81,12 @@ const handleUpdateHabit = (input: HabitInput) => {
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
 
-    <TodayHabits :habits="habits" @delete="handleDeleteHabit" @edit="handleEditHabit" />
+    <TodayHabits
+      :habits="habits"
+      @add="isHabitFormOpen = true"
+      @delete="handleDeleteHabit"
+      @edit="handleEditHabit"
+    />
 
     <HabitForm
       v-if="isHabitFormOpen"
@@ -101,7 +106,8 @@ const handleUpdateHabit = (input: HabitInput) => {
 <style scoped>
 .dashboard {
   min-height: 100vh;
-  padding: 2rem;
+  padding: 3rem 2rem;
+  background: #f7f7f5;
 }
 
 .dashboard-header {
@@ -110,5 +116,31 @@ const handleUpdateHabit = (input: HabitInput) => {
   justify-content: space-between;
   max-width: 900px;
   margin: 0 auto 2rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dashboard-header p {
+  margin: 0.5rem 0 0;
+  color: #6b7280;
+}
+
+.dashboard-header button {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dashboard-header button:hover {
+  background: #444;
 }
 </style>
