@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import type { Habit } from '../../types/habit'
 import type { HabitInput } from '../../types/habitInput'
 
 const emit = defineEmits<{
@@ -8,9 +9,13 @@ const emit = defineEmits<{
   submit: [HabitInput]
 }>()
 
-const name = ref('')
-const description = ref('')
-const color = ref('#6366f1')
+const props = defineProps<{
+  habit?: Habit
+}>()
+
+const name = ref(props.habit?.name ?? '')
+const description = ref(props.habit?.description ?? '')
+const color = ref(props.habit?.color ?? '#6366f1')
 
 const handleSubmit = () => {
   emit('submit', {
@@ -25,7 +30,7 @@ const handleSubmit = () => {
   <div class="modal-backdrop">
     <section class="modal">
       <header class="modal-header">
-        <h2>New habit</h2>
+        <h2>{{ props.habit ? 'Edit habit' : 'New habit' }}</h2>
 
         <button type="button" class="close-button" @click="emit('close')">×</button>
       </header>
@@ -49,7 +54,7 @@ const handleSubmit = () => {
         <div class="form-actions">
           <button type="button" @click="emit('close')">Cancel</button>
 
-          <button type="submit">Create habit</button>
+          <button type="submit">{{ props.habit ? 'Save changes' : 'Create habit' }}</button>
         </div>
       </form>
     </section>

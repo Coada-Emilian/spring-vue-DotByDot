@@ -7,6 +7,11 @@ defineProps<{
 
 const emit = defineEmits<{
   delete: [id: string]
+  edit: [id: string]
+}>()
+
+defineModel<{
+  isHabitFormOpen: boolean
 }>()
 </script>
 
@@ -31,6 +36,8 @@ const emit = defineEmits<{
 
         <div class="habit-actions">
           <button type="button" @click="emit('delete', habit.id)">Delete</button>
+
+          <button type="button" @click="emit('edit', habit.id)">Edit</button>
 
           <button type="button">Complete</button>
         </div>
