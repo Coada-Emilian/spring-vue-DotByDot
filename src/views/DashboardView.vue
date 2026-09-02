@@ -1,12 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import HabitForm from '../components/dashboard/HabitForm.vue'
 import TodayHabits from '../components/dashboard/TodayHabits.vue'
 
-import { getHabits } from '../services/habitService.ts'
+import { createHabit, deleteHabit, getHabits } from '../services/habitService.ts'
 import type { Habit } from '../types/habit'
+import type { HabitInput } from '../types/habitInput'
 
 const habits = ref<Habit[]>(getHabits())
+const isHabitFormOpen = ref(false)
+
+const handleCreateHabit = (input: HabitInput) => {
+  const newHabit = createHabit(input)
+
+  habits.value.push(newHabit)
+
+  isHabitFormOpen.value = false
+}
+
+const handleDeleteHabit = (id: string) => {
+  deleteHabit(id)
+
+  habits.value = habits.value.filter((habit) => habit.id !== id)
+}
 </script>
 
 <template>
@@ -17,10 +34,16 @@ const habits = ref<Habit[]>(getHabits())
         <p>One day at a time.</p>
       </div>
 
-      <button type="button">+ New Habit</button>
+      <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
 
-    <TodayHabits :habits="habits" />
+    <TodayHabits :habits="habits" @delete="handleDeleteHabit" />
+
+    <HabitForm
+      v-if="isHabitFormOpen"
+      @close="isHabitFormOpen = false"
+      @submit="handleCreateHabit"
+    />
   </main>
 </template>
 

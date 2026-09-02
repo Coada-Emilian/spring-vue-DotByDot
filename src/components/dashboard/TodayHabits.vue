@@ -4,6 +4,10 @@ import type { Habit } from '../../types/habit'
 defineProps<{
   habits: Habit[]
 }>()
+
+const emit = defineEmits<{
+  delete: [id: string]
+}>()
 </script>
 
 <template>
@@ -25,7 +29,11 @@ defineProps<{
           </div>
         </div>
 
-        <button type="button" class="complete-button">Complete</button>
+        <div class="habit-actions">
+          <button type="button" @click="emit('delete', habit.id)">Delete</button>
+
+          <button type="button">Complete</button>
+        </div>
       </article>
     </div>
 
