@@ -4,19 +4,46 @@ import { ref } from 'vue'
 import type { Habit } from '../../types/habit'
 import type { HabitInput } from '../../types/habitInput'
 
+// --------------------------------------------------
+// Events
+// --------------------------------------------------
+
+// Events sent back to the parent when the user
+// closes the form or submits the habit data.
 const emit = defineEmits<{
   close: []
   submit: [HabitInput]
 }>()
 
+// --------------------------------------------------
+// Props
+// --------------------------------------------------
+
+// Optional habit received from the parent.
+//
+// If a habit is provided, the form is being used
+// to edit an existing habit.
+// If no habit is provided, the form is creating
+// a new habit.
 const props = defineProps<{
   habit?: Habit
 }>()
 
+// --------------------------------------------------
+// Form State
+// --------------------------------------------------
+
+// Initialize the form with the existing habit's
+// values when editing, or default values when creating.
 const name = ref(props.habit?.name ?? '')
 const description = ref(props.habit?.description ?? '')
 const color = ref(props.habit?.color ?? '#6366f1')
 
+// --------------------------------------------------
+// Form Actions
+// --------------------------------------------------
+
+// Send the completed form data to the parent.
 const handleSubmit = () => {
   emit('submit', {
     name: name.value,

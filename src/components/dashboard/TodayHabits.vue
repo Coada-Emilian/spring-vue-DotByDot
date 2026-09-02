@@ -1,20 +1,29 @@
 <script setup lang="ts">
 import type { Habit } from '../../types/habit'
 
+// --------------------------------------------------
+// Props
+// --------------------------------------------------
+
+// Data and functions received from the parent component.
 defineProps<{
   habits: Habit[]
   selectedDate: string | null
+  isHabitCompleted: (habitId: string) => boolean
 }>()
 
+// --------------------------------------------------
+// Events
+// --------------------------------------------------
+
+// Events sent back to the parent when the user
+// performs an action on a habit.
 const emit = defineEmits<{
   delete: [id: string]
   edit: [id: string]
   add: []
   complete: [id: string]
-}>()
-
-defineModel<{
-  isHabitFormOpen: boolean
+  uncomplete: [id: string]
 }>()
 </script>
 
@@ -29,10 +38,15 @@ defineModel<{
     <div v-if="habits.length" class="habit-list">
       <article v-for="habit in habits" :key="habit.id" class="habit">
         <div class="habit-info">
-          <span class="habit-color" :style="{ backgroundColor: habit.color }" />
+          <span class="habit-color" :style="{ backgroundColor: habit.color }"></span>
 
-          <div>
-            <h3>{{ habit.name }}</h3>
+          <div class="habit-container">
+            <div class="habit-name">
+              <h3>{{ habit.name }}</h3>
+
+              <span v-if="isHabitCompleted(habit.id)" class="completion-check"> ✓ </span>
+            </div>
+
             <p>{{ habit.description }}</p>
           </div>
         </div>
@@ -42,7 +56,14 @@ defineModel<{
 
           <button type="button" @click="emit('edit', habit.id)">Edit</button>
 
-          <button type="button" @click="emit('complete', habit.id)">Complete</button>
+          <button
+            type="button"
+            @click="
+              isHabitCompleted(habit.id) ? emit('uncomplete', habit.id) : emit('complete', habit.id)
+            "
+          >
+            {{ isHabitCompleted(habit.id) ? 'Uncompleted' : 'Completed' }}
+          </button>
         </div>
       </article>
     </div>
@@ -124,7 +145,7 @@ defineModel<{
 }
 
 .habit p {
-  margin: 0.25rem 0 0;
+  margin: 0;
   color: #777;
   font-size: 0.9rem;
 }
@@ -153,5 +174,20 @@ defineModel<{
   padding: 3rem 1rem;
   text-align: center;
   color: #777;
+}
+.completion-check {
+  font-weight: bold;
+}
+
+.habit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.habit-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 </style>

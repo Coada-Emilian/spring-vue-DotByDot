@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { Habit } from '../../types/habit'
+import type { HabitCompletion } from '../../types/habitCompletion'
 
 // --------------------------------------------------
 // Props & Events
 // --------------------------------------------------
 
 const props = defineProps<{
+  habits: Habit[]
+  completions: HabitCompletion[]
   selectedDate: string | null
 }>()
 
@@ -109,6 +113,25 @@ const goToPreviousMonth = () => {
 const goToNextMonth = () => {
   currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1)
 }
+
+const getCompletionsForDay = (day: number | null) => {
+  if (day === null) {
+    return []
+  }
+
+  const date = new Date(currentYear.value, currentMonth.value, day)
+
+  const dateString = date.toISOString().slice(0, 10)
+
+  return props.completions.filter((completion) => completion.date === dateString)
+}
+
+// Find the habit belonging to a completion.
+// The completion only stores habitId, while the Habit
+// contains the display information such as its color.
+const getHabitForCompletion = (completion: HabitCompletion) => {
+  return props.habits.find((habit) => habit.id === completion.habitId)
+}
 </script>
 
 <template>
@@ -140,7 +163,18 @@ const goToNextMonth = () => {
         :disabled="day === null"
         @click="selectDay(day)"
       >
-        {{ day }}
+        <span>{{ day }}</span>
+
+        <div v-if="day !== null" class="completion-dots">
+          <span
+            v-for="completion in getCompletionsForDay(day)"
+            :key="completion.id"
+            class="completion-dot"
+            :style="{
+              backgroundColor: getHabitForCompletion(completion)?.color,
+            }"
+          ></span>
+        </div>
       </button>
     </div>
   </section>
@@ -202,5 +236,18 @@ const goToNextMonth = () => {
 
 .calendar-day.selected {
   border: 2px solid #333;
+}
+
+.completion-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.completion-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
 }
 </style>

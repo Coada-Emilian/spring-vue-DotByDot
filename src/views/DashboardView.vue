@@ -1,25 +1,64 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+// --------------------------------------------------
+// Components
+// --------------------------------------------------
+
+import HabitCalendar from '../components/dashboard/HabitCalendar.vue'
 import HabitForm from '../components/dashboard/HabitForm.vue'
 import TodayHabits from '../components/dashboard/TodayHabits.vue'
 
-import HabitCalendar from '../components/dashboard/HabitCalendar.vue'
-import { createHabitCompletion, getHabitCompletions } from '../services/habitCompletionService.ts'
+// --------------------------------------------------
+// Services
+// --------------------------------------------------
+
 import { createHabit, deleteHabit, getHabits, updateHabit } from '../services/habitService.ts'
+
+import {
+  createHabitCompletion,
+  deleteHabitCompletion,
+  getHabitCompletions,
+} from '../services/habitCompletionService.ts'
+
+// --------------------------------------------------
+// Types
+// --------------------------------------------------
+
 import type { Habit } from '../types/habit'
 import type { HabitCompletion } from '../types/habitCompletion.ts'
 import type { HabitInput } from '../types/habitInput'
 
-// State management for habits, habit form and editedHabit
+// --------------------------------------------------
+// State
+// --------------------------------------------------
+
+// Habits currently stored in localStorage.
 const habits = ref<Habit[]>(getHabits())
+
+// Controls whether the "Create habit" form is visible.
 const isHabitFormOpen = ref(false)
+
+// The habit currently being edited.
 const editedHabit = ref<Habit | null>(null)
+
+// Date selected in the calendar.
+// null means that no specific date was selected,
+// so completions should use today's date.
 const selectedDate = ref<string | null>(null)
+
+// All habit completions currently stored in localStorage.
 const completions = ref<HabitCompletion[]>(getHabitCompletions())
+
+// Error message shown to the user when completion
+// cannot be performed.
 const completionError = ref<string | null>(null)
 
-// Function to handle habit creation
+// --------------------------------------------------
+// Habit Actions
+// --------------------------------------------------
+
+// Create a new habit and add it to the reactive habit list.
 const handleCreateHabit = (input: HabitInput) => {
   if (!input) {
     return
@@ -32,7 +71,7 @@ const handleCreateHabit = (input: HabitInput) => {
   isHabitFormOpen.value = false
 }
 
-// Function to handle habit deletion
+// Delete a habit and remove it from the reactive list.
 const handleDeleteHabit = (id: string) => {
   if (!id) {
     return
@@ -43,7 +82,7 @@ const handleDeleteHabit = (id: string) => {
   habits.value = habits.value.filter((habit) => habit.id !== id)
 }
 
-// Function to handle habit editing
+// Find the habit being edited and store it in editedHabit.
 const handleEditHabit = (id: string) => {
   const habit = habits.value.find((habit) => habit.id === id)
 
@@ -54,7 +93,8 @@ const handleEditHabit = (id: string) => {
   editedHabit.value = habit
 }
 
-// Function to handle habit updating
+// Update the currently edited habit and update the
+// corresponding habit in the reactive list.
 const handleUpdateHabit = (input: HabitInput) => {
   if (!editedHabit.value) {
     return
@@ -75,15 +115,48 @@ const handleUpdateHabit = (input: HabitInput) => {
   editedHabit.value = null
 }
 
+// --------------------------------------------------
+// Completion Logic
+// --------------------------------------------------
+
+// Check whether a habit has been completed for the
+// currently selected date (or today if no date is selected).
+const isHabitCompleted = (habitId: string) => {
+  const today = new Date().toISOString().slice(0, 10)
+  const targetDate = selectedDate.value ?? today
+
+  return completions.value.some(
+    (completion) => completion.habitId === habitId && completion.date === targetDate,
+  )
+}
+
+// Add a completion for the selected date.
+// If no date is selected, today's date is used.
 const handleCompleteHabit = (id: string) => {
-  if (!selectedDate.value) {
-    completionError.value = 'Please select a date first.'
+  const today = new Date().toISOString().slice(0, 10)
+  const targetDate = selectedDate.value ?? today
+
+  const completion = createHabitCompletion(id, targetDate)
+
+  completions.value.push(completion)
+}
+
+// Remove a completion.
+const handleUncompleteHabit = (id: string) => {
+  const today = new Date().toISOString().slice(0, 10)
+  const targetDate = selectedDate.value ?? today
+
+  const completion = completions.value.find(
+    (completion) => completion.habitId === id && completion.date === targetDate,
+  )
+
+  if (!completion) {
     return
   }
 
-  const completion = createHabitCompletion(id, selectedDate.value)
+  deleteHabitCompletion(completion.id)
 
-  completions.value.push(completion)
+  completions.value = completions.value.filter((item) => item.id !== completion.id)
 }
 </script>
 
@@ -105,12 +178,20 @@ const handleCompleteHabit = (id: string) => {
     <TodayHabits
       :habits="habits"
       :selected-date="selectedDate"
+      @add="isHabitFormOpen = true"
       @delete="handleDeleteHabit"
       @edit="handleEditHabit"
       @complete="handleCompleteHabit"
+      :is-habit-completed="isHabitCompleted"
+      @uncomplete="handleUncompleteHabit"
     />
 
-    <HabitCalendar :selected-date="selectedDate" @select-date="selectedDate = $event" />
+    <HabitCalendar
+      :habits="habits"
+      :completions="completions"
+      :selected-date="selectedDate"
+      @select-date="selectedDate = $event"
+    />
 
     <HabitForm
       v-if="isHabitFormOpen"
