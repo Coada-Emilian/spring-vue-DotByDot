@@ -1,7 +1,6 @@
-export interface Habit {
+import type { HabitInput } from './habitInput'
+
+export interface Habit extends HabitInput {
   id: string
-  name: string
-  description?: string
-  color: string
   createdAt: string
 }
