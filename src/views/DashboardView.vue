@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import HabitForm from '../components/dashboard/HabitForm.vue'
 import TodayHabits from '../components/dashboard/TodayHabits.vue'
 
+import HabitCalendar from '../components/dashboard/HabitCalendar.vue'
 import { createHabit, deleteHabit, getHabits, updateHabit } from '../services/habitService.ts'
 import type { Habit } from '../types/habit'
 import type { HabitInput } from '../types/habitInput'
@@ -87,6 +88,8 @@ const handleUpdateHabit = (input: HabitInput) => {
       @delete="handleDeleteHabit"
       @edit="handleEditHabit"
     />
+
+    <HabitCalendar />
 
     <HabitForm
       v-if="isHabitFormOpen"
