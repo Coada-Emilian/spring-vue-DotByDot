@@ -3,12 +3,14 @@ import type { Habit } from '../../types/habit'
 
 defineProps<{
   habits: Habit[]
+  selectedDate: string | null
 }>()
 
 const emit = defineEmits<{
   delete: [id: string]
   edit: [id: string]
   add: []
+  complete: [id: string]
 }>()
 
 defineModel<{
@@ -40,7 +42,7 @@ defineModel<{
 
           <button type="button" @click="emit('edit', habit.id)">Edit</button>
 
-          <button type="button">Complete</button>
+          <button type="button" @click="emit('complete', habit.id)">Complete</button>
         </div>
       </article>
     </div>

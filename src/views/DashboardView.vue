@@ -5,14 +5,19 @@ import HabitForm from '../components/dashboard/HabitForm.vue'
 import TodayHabits from '../components/dashboard/TodayHabits.vue'
 
 import HabitCalendar from '../components/dashboard/HabitCalendar.vue'
+import { createHabitCompletion, getHabitCompletions } from '../services/habitCompletionService.ts'
 import { createHabit, deleteHabit, getHabits, updateHabit } from '../services/habitService.ts'
 import type { Habit } from '../types/habit'
+import type { HabitCompletion } from '../types/habitCompletion.ts'
 import type { HabitInput } from '../types/habitInput'
 
 // State management for habits, habit form and editedHabit
 const habits = ref<Habit[]>(getHabits())
 const isHabitFormOpen = ref(false)
 const editedHabit = ref<Habit | null>(null)
+const selectedDate = ref<string | null>(null)
+const completions = ref<HabitCompletion[]>(getHabitCompletions())
+const completionError = ref<string | null>(null)
 
 // Function to handle habit creation
 const handleCreateHabit = (input: HabitInput) => {
@@ -69,6 +74,17 @@ const handleUpdateHabit = (input: HabitInput) => {
 
   editedHabit.value = null
 }
+
+const handleCompleteHabit = (id: string) => {
+  if (!selectedDate.value) {
+    completionError.value = 'Please select a date first.'
+    return
+  }
+
+  const completion = createHabitCompletion(id, selectedDate.value)
+
+  completions.value.push(completion)
+}
 </script>
 
 <template>
@@ -82,14 +98,19 @@ const handleUpdateHabit = (input: HabitInput) => {
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
 
+    <p v-if="completionError" class="completion-error">
+      {{ completionError }}
+    </p>
+
     <TodayHabits
       :habits="habits"
-      @add="isHabitFormOpen = true"
+      :selected-date="selectedDate"
       @delete="handleDeleteHabit"
       @edit="handleEditHabit"
+      @complete="handleCompleteHabit"
     />
 
-    <HabitCalendar />
+    <HabitCalendar :selected-date="selectedDate" @select-date="selectedDate = $event" />
 
     <HabitForm
       v-if="isHabitFormOpen"
@@ -145,5 +166,11 @@ const handleUpdateHabit = (input: HabitInput) => {
 
 .dashboard-header button:hover {
   background: #444;
+}
+
+.completion-error {
+  max-width: 900px;
+  margin: 1rem auto;
+  color: #b91c1c;
 }
 </style>
