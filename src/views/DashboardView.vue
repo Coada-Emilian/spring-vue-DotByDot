@@ -50,10 +50,6 @@ const selectedDate = ref<string | null>(null)
 // All habit completions currently stored in localStorage.
 const completions = ref<HabitCompletion[]>(getHabitCompletions())
 
-// Error message shown to the user when completion
-// cannot be performed.
-const completionError = ref<string | null>(null)
-
 // --------------------------------------------------
 // Habit Actions
 // --------------------------------------------------
@@ -170,10 +166,6 @@ const handleUncompleteHabit = (id: string) => {
 
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
-
-    <p v-if="completionError" class="completion-error">
-      {{ completionError }}
-    </p>
 
     <TodayHabits
       :habits="habits"
