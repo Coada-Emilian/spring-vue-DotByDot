@@ -1,48 +1,28 @@
 # DotByDot
 
-This template should help get you started developing with Vue 3 in Vite.
+> One day at a time.
 
-## Recommended IDE Setup
+DotByDot is a small personal habit tracker built to help keep track of the things we want to do, one day at a time.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Create habits, give them a color, and mark them complete directly on a calendar. Progress is represented by simple dots, because not every day needs to be perfect — sometimes you just need to keep moving forward.
 
-## Recommended Browser Setup
+## 🚧 Project Status
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Currently in development.
 
-## Type Support for `.vue` Imports in TS
+This project is being built as both a personal tool and a practical full-stack learning project.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Planned stack
 
-## Customize configuration
+- Vue 3
+- TypeScript
+- Vite
+- Spring Boot
+- Java 21
+- PostgreSQL
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+The initial version will use browser local storage before persistence is moved to the Spring Boot backend.
 
-## Project Setup
+---
 
-```sh
-pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+**One day at a time.**
