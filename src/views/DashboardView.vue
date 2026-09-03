@@ -330,6 +330,7 @@ const encouragementMessage = computed(() => {
 @media (max-width: 700px) {
   .dashboard {
     padding: 2rem 1rem;
+    margin-left: 0;
   }
 
   .dashboard-header {
