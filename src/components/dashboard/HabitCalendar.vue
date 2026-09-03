@@ -135,7 +135,7 @@ const getHabitForCompletion = (completion: HabitCompletion) => {
 </script>
 
 <template>
-  <section class="calendar">
+  <section class="card calendar">
     <header class="calendar-header">
       <button type="button" @click="goToPreviousMonth">←</button>
 
@@ -182,12 +182,10 @@ const getHabitForCompletion = (completion: HabitCompletion) => {
 
 <style scoped>
 .calendar {
-  max-width: 900px;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 2rem auto 0;
   padding: 1.5rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 14px;
-  background: white;
 }
 
 .calendar-header {
@@ -199,48 +197,75 @@ const getHabitForCompletion = (completion: HabitCompletion) => {
 
 .calendar-header h2 {
   margin: 0;
+  color: var(--color-navy);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .calendar-header button {
-  border: 1px solid #ddd;
-  border-radius: 7px;
-  background: white;
-  padding: 0.4rem 0.7rem;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.calendar-header button:hover {
+  border-color: var(--color-navy-light);
+  background: var(--color-background);
 }
 
 .weekday-header,
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .weekday-header {
   margin-bottom: 0.5rem;
+  color: var(--color-navy-light);
   text-align: center;
   font-size: 0.8rem;
-  color: #777;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .calendar-day {
   min-height: 70px;
-  border: 1px solid #eee;
-  background: white;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.calendar-day:hover {
+  background: var(--color-background);
 }
 
 .calendar-day:disabled {
-  background: #fafafa;
+  background: var(--color-background);
+  color: var(--color-text-muted);
   cursor: default;
 }
 
 .calendar-day.selected {
-  border: 2px solid #333;
+  border: 2px solid var(--color-navy);
+  background: #f1f5f9;
 }
 
 .completion-dots {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.25rem;
   margin-top: 0.4rem;
 }
@@ -248,6 +273,7 @@ const getHabitForCompletion = (completion: HabitCompletion) => {
 .completion-dot {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
   border-radius: 50%;
 }
 </style>
