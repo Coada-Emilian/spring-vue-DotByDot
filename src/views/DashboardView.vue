@@ -208,22 +208,26 @@ const encouragementMessage = computed(() => {
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
 
-    <TodayHabits
-      :habits="habits"
-      :is-habit-completed="isHabitCompleted"
-      @add="isHabitFormOpen = true"
-      @delete="handleDeleteHabit"
-      @edit="handleEditHabit"
-      @complete="handleCompleteHabit"
-      @uncomplete="handleUncompleteHabit"
-    />
+    <div class="dashboard-content">
+      <HabitCalendar
+        class="calendar-panel"
+        :habits="habits"
+        :completions="completions"
+        :selected-date="selectedDate"
+        @select-date="selectedDate = $event"
+      />
 
-    <HabitCalendar
-      :habits="habits"
-      :completions="completions"
-      :selected-date="selectedDate"
-      @select-date="selectedDate = $event"
-    />
+      <TodayHabits
+        class="habits-panel"
+        :habits="habits"
+        :is-habit-completed="isHabitCompleted"
+        @add="isHabitFormOpen = true"
+        @delete="handleDeleteHabit"
+        @edit="handleEditHabit"
+        @complete="handleCompleteHabit"
+        @uncomplete="handleUncompleteHabit"
+      />
+    </div>
 
     <HabitForm
       v-if="isHabitFormOpen"
@@ -244,46 +248,98 @@ const encouragementMessage = computed(() => {
 .dashboard {
   min-height: 100vh;
   padding: 3rem 2rem;
-  background: #f7f7f5;
 }
 
 .dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 900px;
+  gap: 2rem;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 0 auto 2rem;
 }
 
 .dashboard-header h1 {
   margin: 0;
+  color: var(--color-navy);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .dashboard-header p {
   margin: 0.5rem 0 0;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .dashboard-header button {
+  flex-shrink: 0;
   padding: 0.7rem 1rem;
   border: none;
-  border-radius: 8px;
-  background: #222;
+  border-radius: var(--radius-sm);
+  background: var(--color-navy);
   color: white;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .dashboard-header button:hover {
-  background: #444;
+  background: var(--color-navy-light);
 }
 
 .completion-error {
-  max-width: 900px;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 1rem auto;
   color: #b91c1c;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(360px, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+.dashboard-content .calendar-panel,
+.dashboard-content .habits-panel {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .habits-panel {
+    order: 1;
+  }
+
+  .calendar-panel {
+    order: 2;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    padding: 2rem 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .dashboard-header button {
+    width: 100%;
+  }
 }
 </style>

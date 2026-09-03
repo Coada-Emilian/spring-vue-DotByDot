@@ -95,32 +95,55 @@ const handleSubmit = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(0 0 0 / 40%);
+  padding: 1rem;
+  background: rgb(15 23 42 / 45%);
+  z-index: 100;
 }
 
 .modal {
-  width: min(90%, 450px);
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: white;
+  width: min(100%, 450px);
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: 0 20px 50px rgb(15 23 42 / 18%);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
 .modal-header h2 {
   margin: 0;
+  color: var(--color-navy);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .close-button {
-  border: none;
-  background: none;
-  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.close-button:hover {
+  border-color: var(--color-navy-light);
+  background: var(--color-background);
+  color: var(--color-text);
 }
 
 form {
@@ -132,18 +155,38 @@ form {
 label {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 input[type='text'] {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input[type='text']:focus {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
 }
 
 input[type='color'] {
-  width: 50px;
-  height: 35px;
+  width: 64px;
+  height: 44px;
+  padding: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
 }
 
 .form-actions {
@@ -151,5 +194,53 @@ input[type='color'] {
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+.form-actions button {
+  min-height: 40px;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.form-actions button:hover {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.form-actions button:last-child {
+  border-color: var(--color-navy);
+  background: var(--color-navy);
+  color: white;
+}
+
+.form-actions button:last-child:hover {
+  border-color: var(--color-navy-light);
+  background: var(--color-navy-light);
+}
+
+@media (max-width: 500px) {
+  .modal {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+    min-height: 40px;
+  }
 }
 </style>
