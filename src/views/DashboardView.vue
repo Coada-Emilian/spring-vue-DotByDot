@@ -208,22 +208,26 @@ const encouragementMessage = computed(() => {
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
     </header>
 
-    <TodayHabits
-      :habits="habits"
-      :is-habit-completed="isHabitCompleted"
-      @add="isHabitFormOpen = true"
-      @delete="handleDeleteHabit"
-      @edit="handleEditHabit"
-      @complete="handleCompleteHabit"
-      @uncomplete="handleUncompleteHabit"
-    />
+    <div class="dashboard-content">
+      <HabitCalendar
+        class="calendar-panel"
+        :habits="habits"
+        :completions="completions"
+        :selected-date="selectedDate"
+        @select-date="selectedDate = $event"
+      />
 
-    <HabitCalendar
-      :habits="habits"
-      :completions="completions"
-      :selected-date="selectedDate"
-      @select-date="selectedDate = $event"
-    />
+      <TodayHabits
+        class="habits-panel"
+        :habits="habits"
+        :is-habit-completed="isHabitCompleted"
+        @add="isHabitFormOpen = true"
+        @delete="handleDeleteHabit"
+        @edit="handleEditHabit"
+        @complete="handleCompleteHabit"
+        @uncomplete="handleUncompleteHabit"
+      />
+    </div>
 
     <HabitForm
       v-if="isHabitFormOpen"
@@ -290,6 +294,37 @@ const encouragementMessage = computed(() => {
   max-width: var(--content-width);
   margin: 1rem auto;
   color: #b91c1c;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(360px, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+.dashboard-content .calendar-panel,
+.dashboard-content .habits-panel {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .habits-panel {
+    order: 1;
+  }
+
+  .calendar-panel {
+    order: 2;
+  }
 }
 
 @media (max-width: 700px) {
