@@ -8,7 +8,6 @@ import type { Habit } from '../../types/habit'
 // Data and functions received from the parent component.
 defineProps<{
   habits: Habit[]
-  selectedDate: string | null
   isHabitCompleted: (habitId: string) => boolean
 }>()
 

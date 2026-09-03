@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // --------------------------------------------------
 // Components
@@ -18,6 +18,7 @@ import { createHabit, deleteHabit, getHabits, updateHabit } from '../services/ha
 import {
   createHabitCompletion,
   deleteHabitCompletion,
+  deleteHabitCompletions,
   getHabitCompletions,
 } from '../services/habitCompletionService.ts'
 
@@ -73,9 +74,11 @@ const handleDeleteHabit = (id: string) => {
     return
   }
 
+  deleteHabitCompletions(id)
   deleteHabit(id)
 
   habits.value = habits.value.filter((habit) => habit.id !== id)
+  completions.value = completions.value.filter((completion) => completion.habitId !== id)
 }
 
 // Find the habit being edited and store it in editedHabit.
@@ -154,6 +157,44 @@ const handleUncompleteHabit = (id: string) => {
 
   completions.value = completions.value.filter((item) => item.id !== completion.id)
 }
+
+// --------------------------------------------------
+// Encouragement
+// --------------------------------------------------
+
+const completedHabitsCount = computed(() => {
+  const today = new Date().toISOString().slice(0, 10)
+
+  return completions.value.filter((completion) => completion.date === today).length
+})
+
+const encouragementMessage = computed(() => {
+  const total = habits.value.length
+  const completed = completedHabitsCount.value
+  const halfway = total / 2
+
+  if (total === 0) {
+    return 'Create a habit and start your journey!'
+  }
+
+  if (completed === 0) {
+    return "Let's get started!"
+  }
+
+  if (completed === total) {
+    return 'All habits done! 🎉'
+  }
+
+  if (completed === halfway) {
+    return "Halfway there! You're doing great!"
+  }
+
+  if (completed < halfway) {
+    return 'Good start! Keep going!'
+  }
+
+  return 'Almost there! Finish strong!'
+})
 </script>
 
 <template>
@@ -161,7 +202,7 @@ const handleUncompleteHabit = (id: string) => {
     <header class="dashboard-header">
       <div>
         <h1>Good morning, Emil!</h1>
-        <p>One day at a time.</p>
+        <p>{{ encouragementMessage }}</p>
       </div>
 
       <button type="button" @click="isHabitFormOpen = true">+ New Habit</button>
@@ -169,12 +210,11 @@ const handleUncompleteHabit = (id: string) => {
 
     <TodayHabits
       :habits="habits"
-      :selected-date="selectedDate"
+      :is-habit-completed="isHabitCompleted"
       @add="isHabitFormOpen = true"
       @delete="handleDeleteHabit"
       @edit="handleEditHabit"
       @complete="handleCompleteHabit"
-      :is-habit-completed="isHabitCompleted"
       @uncomplete="handleUncompleteHabit"
     />
 
