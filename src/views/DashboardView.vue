@@ -244,46 +244,67 @@ const encouragementMessage = computed(() => {
 .dashboard {
   min-height: 100vh;
   padding: 3rem 2rem;
-  background: #f7f7f5;
 }
 
 .dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 900px;
+  gap: 2rem;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 0 auto 2rem;
 }
 
 .dashboard-header h1 {
   margin: 0;
+  color: var(--color-navy);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .dashboard-header p {
   margin: 0.5rem 0 0;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .dashboard-header button {
+  flex-shrink: 0;
   padding: 0.7rem 1rem;
   border: none;
-  border-radius: 8px;
-  background: #222;
+  border-radius: var(--radius-sm);
+  background: var(--color-navy);
   color: white;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .dashboard-header button:hover {
-  background: #444;
+  background: var(--color-navy-light);
 }
 
 .completion-error {
-  max-width: 900px;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 1rem auto;
   color: #b91c1c;
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    padding: 2rem 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .dashboard-header button {
+    width: 100%;
+  }
 }
 </style>
