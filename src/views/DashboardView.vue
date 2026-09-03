@@ -26,6 +26,7 @@ import {
 // Types
 // --------------------------------------------------
 
+import AppFooter from '../components/layout/AppFooter.vue'
 import type { Habit } from '../types/habit'
 import type { HabitCompletion } from '../types/habitCompletion.ts'
 import type { HabitInput } from '../types/habitInput'
@@ -241,6 +242,7 @@ const encouragementMessage = computed(() => {
       @close="editedHabit = null"
       @submit="handleUpdateHabit"
     />
+    <AppFooter />
   </main>
 </template>
 
@@ -248,6 +250,9 @@ const encouragementMessage = computed(() => {
 .dashboard {
   min-height: 100vh;
   padding: 3rem 2rem;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dashboard-header {
@@ -310,6 +315,14 @@ const encouragementMessage = computed(() => {
   width: 100%;
   max-width: none;
   margin: 0;
+}
+
+.dashboard {
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 800px) {
